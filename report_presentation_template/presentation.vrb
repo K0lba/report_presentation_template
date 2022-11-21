@@ -1,0 +1,8 @@
+\frametitle{Архитектура решения}
+  \begin{itemize}
+    \item В реализации интересны архитектура, библиотеки, инструменты
+    \item Не надо добавлять на слайд примеры кода
+  \end{itemize}
+  \begin{center}
+  \includegraphics[width=0.8\textwidth]{pictures/Activ_SEL_Processing.pdf}
+  \end{center}
