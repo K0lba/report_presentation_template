@@ -21,19 +21,10 @@
 \headcommand {\slideentry {0}{0}{11}{11/11}{}{0}}
 \headcommand {\beamer@framepages {11}{11}}
 \headcommand {\gdef \insertmainframenumber {11}}
-\headcommand {\partentry {{\cyrillictext \CYRP \cyrr \cyri \cyrl \cyro \cyrzh \cyre \cyrn \cyri \cyre }}{1}}
-\headcommand {\beamer@partpages {1}{11}}
-\headcommand {\beamer@sectionpages {1}{11}}
-\headcommand {\beamer@subsectionpages {1}{11}}
-\headcommand {\beamer@appendixpages {12}}
-\headcommand {\slideentry {0}{0}{12}{12/12}{}{1}}
-\headcommand {\beamer@framepages {12}{12}}
-\headcommand {\slideentry {0}{0}{13}{13/13}{}{1}}
-\headcommand {\beamer@framepages {13}{13}}
-\headcommand {\beamer@partpages {12}{13}}
-\headcommand {\beamer@subsectionpages {12}{13}}
-\headcommand {\beamer@sectionpages {12}{13}}
-\headcommand {\beamer@documentpages {13}}
-\headcommand {\gdef \inserttotalframenumber {2}}
+\headcommand {\beamer@partpages {12}{11}}
+\headcommand {\beamer@subsectionpages {12}{11}}
+\headcommand {\beamer@sectionpages {12}{11}}
+\headcommand {\beamer@documentpages {11}}
+\headcommand {\gdef \inserttotalframenumber {0}}
 \headcommand {\gdef \inserttotalframenumber {11}}
-\headcommand {\gdef \appendixtotalframenumber {2}}
+\headcommand {\gdef \appendixtotalframenumber {0}}
