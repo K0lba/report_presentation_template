@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.11.21)  5 DEC 2022 15:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.12.6)  7 DEC 2022 14:20
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -404,9 +404,9 @@ Language: english 2017/06/06 v3.3r English support from the babel system
 Package babel Info: Hyphen rules for 'canadian' set to \l@english
 (babel)             (\language0). Reported on input line 102.
 Package babel Info: Hyphen rules for 'australian' set to \l@ukenglish
-(babel)             (\language79). Reported on input line 105.
+(babel)             (\language32). Reported on input line 105.
 Package babel Info: Hyphen rules for 'newzealand' set to \l@ukenglish
-(babel)             (\language79). Reported on input line 108.
+(babel)             (\language32). Reported on input line 108.
 ) (/usr/share/texlive/texmf-dist/tex/generic/babel-russian/russianb.ldf
 File: russianb.ldf 2021/01/10 1.3m Russian support for the Babel system
 Language: russian 2020/09/09 1.3k Russian support for the Babel system
@@ -1186,7 +1186,7 @@ File: pictures/in3.pdf Graphic file (type pdf)
 Package pdftex.def Info: pictures/in3.pdf  used on input line 23.
 (pdftex.def)             Requested size: 71.13188pt x 57.31863pt.
 )
-Overfull \hbox (23.13776pt too wide) in paragraph at lines 3--182
+Overfull \hbox (23.13776pt too wide) in paragraph at lines 3--183
 [][]  
  []
 
@@ -1217,7 +1217,7 @@ Package pdftex.def Info: pictures/Activ_SEL_Processing.pdf  used on input line 7
 <pictures/dist.png, id=167, 1400.23125pt x 668.4975pt>
 File: pictures/dist.png Graphic file (type png)
 <use pictures/dist.png>
-Package pdftex.def Info: pictures/dist.png  used on input line 235.
+Package pdftex.def Info: pictures/dist.png  used on input line 236.
 (pdftex.def)             Requested size: 284.52756pt x 135.83922pt.
  [10
 
@@ -1226,43 +1226,43 @@ Package pdftex.def Info: pictures/dist.png  used on input line 235.
 ]
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\CYRP' on input line 254.
+(hyperref)                removing `\CYRP' on input line 255.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyrr' on input line 254.
+(hyperref)                removing `\cyrr' on input line 255.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyri' on input line 254.
+(hyperref)                removing `\cyri' on input line 255.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyrl' on input line 254.
+(hyperref)                removing `\cyrl' on input line 255.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyro' on input line 254.
+(hyperref)                removing `\cyro' on input line 255.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyrzh' on input line 254.
+(hyperref)                removing `\cyrzh' on input line 255.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyre' on input line 254.
+(hyperref)                removing `\cyre' on input line 255.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyrn' on input line 254.
+(hyperref)                removing `\cyrn' on input line 255.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyri' on input line 254.
+(hyperref)                removing `\cyri' on input line 255.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyre' on input line 254.
+(hyperref)                removing `\cyre' on input line 255.
 
 \tf@nav=\write7
 \openout7 = `presentation.nav'.
@@ -1279,14 +1279,14 @@ Package rerunfilecheck Info: File `presentation.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  31462 strings out of 478287
- 644228 string characters out of 5849288
- 915321 words of memory out of 5000000
+ 644228 string characters out of 5849289
+ 914857 words of memory out of 5000000
  48869 multiletter control sequences out of 15000+600000
  494979 words of font info for 93 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,15n,122p,472b,646s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsi1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0600.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx0600.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1095.pfb>
-Output written on presentation.pdf (11 pages, 661379 bytes).
+Output written on presentation.pdf (11 pages, 660619 bytes).
 PDF statistics:
  240 PDF objects out of 1000 (max. 8388607)
  159 compressed objects within 2 object streams
