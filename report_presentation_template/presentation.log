@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=pdflatex 2022.12.7)  8 DEC 2022 15:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=pdflatex 2022.12.7)  8 DEC 2022 16:15
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1179,7 +1179,11 @@ File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/mat
 
 ] [4
 
-] [5
+]
+LaTeX Font Info:    Trying to load font information for T2A+cmtt on input line 142.
+ (/usr/share/texlive/texmf-dist/tex/latex/cyrillic/t2acmtt.fd
+File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
+) [5
 
 ] [6
 
@@ -1194,43 +1198,43 @@ File: ot1mathkerncmss.fd 2020/01/31 Fontinst v1.933 font definitions for OT1/mat
 ]
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\CYRP' on input line 282.
+(hyperref)                removing `\CYRP' on input line 283.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyrr' on input line 282.
+(hyperref)                removing `\cyrr' on input line 283.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyri' on input line 282.
+(hyperref)                removing `\cyri' on input line 283.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyrl' on input line 282.
+(hyperref)                removing `\cyrl' on input line 283.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyro' on input line 282.
+(hyperref)                removing `\cyro' on input line 283.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyrzh' on input line 282.
+(hyperref)                removing `\cyrzh' on input line 283.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyre' on input line 282.
+(hyperref)                removing `\cyre' on input line 283.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyrn' on input line 282.
+(hyperref)                removing `\cyrn' on input line 283.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyri' on input line 282.
+(hyperref)                removing `\cyri' on input line 283.
 
 
 Package hyperref Warning: Glyph not defined in PU encoding,
-(hyperref)                removing `\cyre' on input line 282.
+(hyperref)                removing `\cyre' on input line 283.
 
 \tf@nav=\write7
 \openout7 = `presentation.nav'.
@@ -1246,18 +1250,18 @@ Package rerunfilecheck Info: File `presentation.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 31456 strings out of 478023
- 643723 string characters out of 5841208
+ 31481 strings out of 478023
+ 644434 string characters out of 5841208
  924017 words of memory out of 5000000
- 49151 multiletter control sequences out of 15000+600000
- 488549 words of font info for 74 fonts, out of 8000000 for 9000
+ 49170 multiletter control sequences out of 15000+600000
+ 488859 words of font info for 75 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,15n,122p,496b,628s stack positions out of 10000i,1000n,20000p,200000b,200000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0600.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx0600.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx1095.pfb>
-Output written on presentation.pdf (10 pages, 285152 bytes).
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0600.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx0600.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt0900.pfb>
+Output written on presentation.pdf (10 pages, 318257 bytes).
 PDF statistics:
- 149 PDF objects out of 1000 (max. 8388607)
- 103 compressed objects within 2 object streams
+ 157 PDF objects out of 1000 (max. 8388607)
+ 110 compressed objects within 2 object streams
  21 named destinations out of 1000 (max. 500000)
  110 words of extra memory for PDF output out of 10000 (max. 10000000)
 
