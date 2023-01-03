@@ -1,6 +1,6 @@
-\documentclass{beamer}
+% \documentclass{beamer}
 %Для защит онлайн лучше использовать разрешение 16x9
-%\documentclass[aspectratio=169]{beamer}
+\documentclass[aspectratio=169]{beamer}
 
 \usepackage{beamerthemesplit}
 \usepackage{wrapfig}
@@ -26,8 +26,43 @@
 \newtheorem{ruproof}{Доказательство}
 \newtheorem{rudefinition}{Определение}
 \newtheorem{rulemma}{Лемма}
+\usepackage{listings}
+\lstdefinelanguage{NeoIDL}{
+  sensitive = true,
+  keywords={},
+  otherkeywords={% Operators
+    >, <, ==
+  },
+  keywords = [2]{module, resource, enum, annotation, for, import, entity, path,
+  @get, @post, @put, @delete, require, ensure, otherwise, call},
+  keywordstyle=\color{green},
+  keywordstyle=[2]\color{blue},% for example
+  numbers=left,
+  numberstyle=\scriptsize,
+  stepnumber=1,
+  numbersep=8pt,
+  showstringspaces=false,
+  breaklines=true,
+  frame=top,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+  }
+\lstdefinestyle{base}{
+  language=C,
+  emptylines=1,
+  breaklines=true,
+  basicstyle=\ttfamily\color{black},
+  moredelim=**[is][\color{red}]{@}{@},
+}
+% \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt,showspaces=false}
+
 
 \beamertemplatenavigationsymbolsempty
+
 
 % То, что в квадратных скобках, отображается внизу по центру каждого слайда. 
 \title[Параллелизация miniKanren]{Параллельная реализация miniKanren}
@@ -43,85 +78,90 @@
 \setbeamertemplate{footline}{}
 % Лого университета или организации, отображается в шапке титульного листа
 \begin{frame}
-  \includegraphics[width=1.4cm]{pictures/SPbGU_Logo.png}
-  \vspace{-35pt}
-  \hspace{-10pt}
-  \begin{center}
-    \begin{tabular}{c}
-      \scriptsize{Санкт-Петербургский государственный университет} \\
-      \scriptsize{Кафедра системного программирования}
-    \end{tabular}
-    \titlepage
-  \end{center}
+	\includegraphics[width=1.4cm]{pictures/SPbGU_Logo.png}
+	\vspace{-35pt}
+	\hspace{-10pt}
+	\begin{center}
+		\begin{tabular}{c}
+			\scriptsize{Санкт-Петербургский государственный университет} \\
+			\scriptsize{Кафедра системного программирования}
+		\end{tabular}
+		\titlepage
+	\end{center}
 
-  \btVFill
+	\btVFill
 
-  {\scriptsize
-    % У научного руководителя должна быть указана научная степень
-    {\bfseries Научный руководитель:} Д.С.Косарев, ассистент кафедры системного программирования \\
-    % Консультанта может и не быть. Должна быть указана должность или ученая степень
-    % {\bfseries Консультант:}  к.ф.-м.н. Д.С.Косарев, "MatMex, JetBrains Research laboratory" \\
-    % Для курсовой не обязателен. Должна быть указана должность или ученая степень
-    % {\bfseries Рецензент:} д.т.н., проф. И.И. Иванов, исполнительный директор ООО ``Рога и копыта''
-  }
-  \begin{center}
-    \vspace{5pt}
-    \scriptsize{Санкт-Петербург\\
-      2022}
-  \end{center}
+	{\scriptsize
+		% У научного руководителя должна быть указана научная степень
+		{\bfseries Научный руководитель:} Д.С.Косарев, ассистент кафедры системного программирования \\
+		% Консультанта может и не быть. Должна быть указана должность или ученая степень
+		% {\bfseries Консультант:}  к.ф.-м.н. Д.С.Косарев, "MatMex, JetBrains Research laboratory" \\
+		% Для курсовой не обязателен. Должна быть указана должность или ученая степень
+		% {\bfseries Рецензент:} д.т.н., проф. И.И. Иванов, исполнительный директор ООО ``Рога и копыта''
+	}
+	\begin{center}
+		\vspace{5pt}
+		\scriptsize{Санкт-Петербург\\
+			2023}
+	\end{center}
 
 \end{frame}
 }
 
 \begin{frame}[fragile]
-  \frametitle{Введение}
-  \begin{itemize}
-    \item Работа направлена на повышение эффективности вычислений на языке miniKanren путем декомпозиции задачи на потоках
-          % Краткий обзор тематики работы (как вариант --- устно, пока показывается титульный слайд)
-    \item Данное решение предназначено для разработчиков, иcпользующих miniKanren
-          % Не нужно определять общеизвестные понятия
-    \item Сообщество miniKanren всерьез еще этим не занималось, поэтому у работы нет аналогов
-          % Применимость/полезность данной работы, обоснование выбора именно этой темы
-          % \item Если тема похожа на темы других работ (в том числе прошлых лет), надо явно описать разницу
-  \end{itemize}
+	\frametitle{Введение}
+	\begin{itemize}
+		\item Работа направлена на повышение эффективности вычислений на языке miniKanren путем декомпозиции задачи на потоках
+		      % Краткий обзор тематики работы (как вариант --- устно, пока показывается титульный слайд)
+		\item Данное решение предназначено для разработчиков, иcпользующих miniKanren
+		      % Не нужно определять общеизвестные понятия
+		      % \item Сообщество miniKanren всерьез еще этим не занималось, поэтому 
+		\item У работы нет аналогов
+		\item За основу взят язык программирования OCaml, а также встаиваемый в него язык miniKanren
+		      % Применимость/полезность данной работы, обоснование выбора именно этой темы
+		      % \item Если тема похожа на темы других работ (в том числе прошлых лет), надо явно описать разницу
+	\end{itemize}
 \end{frame}
 
 
 \begin{frame}
-  \frametitle{Постановка задачи}
-  \textbf{Целью} работы является распараллеливание miniKanren %озвученной выше  
+	\frametitle{Постановка задачи}
+	\textbf{Целью} работы является распараллеливание минимальной реализа-
+	ции miniKanren для OCaml %озвученной выше  
 
-  \textbf{Задачи}:
-  \begin{itemize}
-    % \item Выбрать алгоритм, подход, метод %основываясь на проведённом анализе проблемы, области, существующих решений
-          % \item Доказать корректность алгоритма
-    \item Выбрать версию OCaml, на которой будет реализована параллельность 
-    %\item Изучить примеры параллелизации
-    \item Научиться параллелить две независимые задачи на miniKanren
-    \item Подзадачи:
-    \begin{itemize}
-      % \item Выбрать алгоритм, подход, метод %основываясь на проведённом анализе проблемы, области, существующих решений
-            % \item Доказать корректность алгоритма
-      \item запустить параллельно appendo
-      %\item Изучить примеры параллелизации
-      \item запустить параллельно reverso
-      \item Объединить поток Stream в ответ
-    \end{itemize}
-  \end{itemize}
+	\textbf{Задачи}:
+	\begin{itemize}
+		% \item Выбрать алгоритм, подход, метод %основываясь на проведённом анализе проблемы, области, существующих решений
+		% \item Доказать корректность алгоритма
+		\item Выбрать версию OCaml, на которой будет реализована параллельность
+		      %\item Изучить примеры параллелизации
+		\item Внешне распараллелить две независимые задачи на miniKanren
+		\item Встроить в Unicanren параллелизацию, которая работает не толь-
+		      ко внешне\footnote{\url{https://github.com/Kakadu/unicanren} (Дата доступа: 03.01.2023)}
+		      % \item Подзадачи:
+		      % \begin{itemize}
+		      %   % \item Выбрать алгоритм, подход, метод %основываясь на проведённом анализе проблемы, области, существующих решений
+		      %         % \item Доказать корректность алгоритма
+		      %   \item запустить параллельно append$^{o}$
+		      %   %\item Изучить примеры параллелизации
+		      %   \item запустить параллельно revers$^{o}$
+		      %   \item Объединить поток Stream в ответ
+		      % \end{itemize}
+	\end{itemize}
 \end{frame}
 
 
 
 
-\begin{frame}
-  \frametitle{Используемые инструменты, подходы}
-  \begin{itemize}
-    \item За основу взят язык программирования OCaml, а также встаиваемый в него язык miniKanren
-    \item Для разработки моего проекта была задействована библиотека Domainslib для OСaml версии 5
-    \item В 5 версии добавлены новые инструменты для параллелизации 
-  \end{itemize}
+% \begin{frame}
+%   \frametitle{Используемые инструменты, подходы}
+%   \begin{itemize}
+%     \item За основу взят язык программирования OCaml, а также встаиваемый в него язык miniKanren
+%     \item Для разработки моего проекта была задействована библиотека Domainslib для OСaml версии 5
+%     \item В 5 версии добавлены новые инструменты для параллелизации 
+%   \end{itemize}
 
-\end{frame}
+% \end{frame}
 
 % \begin{frame}
 %   \frametitle{Существующие решения}
@@ -143,13 +183,16 @@
 %Идеально, если есть по одному слайду на каждую поставленную задачу            
 
 \begin{frame}
-  \frametitle{OCaml}
-  \begin{itemize}
-  \item Выбрана самая свежая версия OCaml (5.0.0~beta2)\footnote{\url{https://ocaml.org/news/ocaml-5.0.beta2}(Дата доступа: 08.12.22)}
-  В этой версии добавили multicore в runtime и
-  c помощью этого легко параллелить программы на OCaml
-  \item Почему была выбрана 5 версия? В 4 версии нет настоящего параллелизма (приходится запускать системные потоки и параллельность происходит на уровне системы, а не на уровне OCaml)
-  \end{itemize}
+	\frametitle{Используемые инструменты, подходы}
+	\begin{itemize}
+		\item Выбрана самая свежая версия OCaml (5.0.0~beta2)\footnote{\url{https://ocaml.org/news/ocaml-5.0.beta2}(Дата доступа: 08.12.22)}
+		      В этой версии добавили multicore в runtime и
+		      c помощью этого легко параллелить программы на OCaml
+		\item Для распараллеливания используется библиотека DomainsLib\footnote{\url{https://github.com/ocaml-multicore/parallel-programming-in-multicore-ocaml}(Дата доступа: 08.12.22)},
+		      в которой присутствуют 2 модуля: Task -- для вызова многопоточности и Chan -- для передачи информации между доменами
+		\item Вся проделанная работа выполнена на минимальной реализации miniKanren -- Unicanren, которая состоит из 4 базовых конструкций: Fresh, Unify, Conde и Conj
+		      % \item Почему была выбрана 5 версия? В 4 версии нет настоящего параллелизма (приходится запускать системные потоки и параллельность происходит на уровне системы, а не на уровне OCaml)
+	\end{itemize}
 \end{frame}
 
 
@@ -163,16 +206,16 @@
 %   \end{itemize}
 % \end{frame}
 
-  
-\begin{frame}
-  \frametitle{DomainsLib}
-  % Задается ширина столбцов
-  \begin{itemize}
-  \item Для распараллеливания используется библиотека DomainsLib\footnote{\url{https://github.com/ocaml-multicore/parallel-programming-in-multicore-ocaml}(Дата доступа: 08.12.22)}, 
-  в которой присутствуют 2 модуля: Task -- для вызова многопоточности и Chan -- для передачи информации между доменами
-  \item Для освоения способов применения я изучил предложенные примеры параллельного сложения матриц и также рассмотрел реализацию чисел Фибоначчи, которая тоже была распараллелена
-  \end{itemize}
-\end{frame}
+
+% \begin{frame}
+%   \frametitle{DomainsLib}
+%   % Задается ширина столбцов
+%   \begin{itemize}
+%   \item Для распараллеливания используется библиотека DomainsLib\footnote{\url{https://github.com/ocaml-multicore/parallel-programming-in-multicore-ocaml}(Дата доступа: 08.12.22)}, 
+%   в которой присутствуют 2 модуля: Task -- для вызова многопоточности и Chan -- для передачи информации между доменами
+%   % \item Для освоения способов применения мною были изучены предложенные примеры параллельного сложения матриц и рассмотренна реализация чисел Фибоначчи, которая тоже была распараллелена
+%   \end{itemize}
+% \end{frame}
 
 
 % \begin{frame}[fragile]
@@ -194,14 +237,14 @@
 %   \end{rutheorem}
 % \end{frame}
 
-\begin{frame}
-  \frametitle{Unicanren}
-  \begin{itemize}
-  \item Вся проделанная работа выполнена на минимальной реализации miniKanren -- Unicanren\footnote{{https://github.com/Kakadu/unicanren}(Дата доступа: 08.12.22)}, которая состоит из 4 базовых конструкций: Fresh, Unify, Conde и Conj
-  \item В этой работе есть возможность параллелить только дизъюнкцию (conde), так как это выполнение двух независимых задач, в то время как все остальное - зависимые задачи и нет осознания того, как их параллелить
-  
-  \end{itemize}
-  \end{frame}
+% \begin{frame}
+%   \frametitle{Unicanren}
+%   \begin{itemize}
+%   \item Вся проделанная работа выполнена на минимальной реализации miniKanren -- Unicanren\footnote{{https://github.com/Kakadu/unicanren}(Дата доступа: 08.12.22)}, которая состоит из 4 базовых конструкций: Fresh, Unify, Conde и Conj
+%   % \item В этой работе есть возможность параллелить только дизъюнкцию (conde), так как это выполнение двух независимых задач, в то время как все остальное -- зависимые задачи и нет осознания того, как их параллелить
+
+%   \end{itemize}
+%   \end{frame}
 
 % \begin{frame}[fragile]
 %   \frametitle{Архитектура решения}
@@ -215,17 +258,83 @@
 % \end{frame}
 
 \begin{frame}
-  \frametitle{Процесс работы}
-  \begin{itemize}
-  \item Я начал с простых задач:
-  \begin{itemize}
-  \item Параллельный запуск appendo
-  \item Параллельный запуск reverso (при котором возникла проблема нехватки памяти)
-  \item Параллельный запуск некоторых функций, которые возвращают несколько ответов
-  \item Последней задачей оказалось слияние Stream'ов: Хотим доставать ответы по мере поступаления изнутри функции и вытягивать их на верхний уровень(в ответ)
-  \end{itemize}
-  \end{itemize}
-  \end{frame}
+	\frametitle{Процесс работы(1/4)}
+	\begin{itemize}
+		% \item Задачи, которые мне предстояло выполнить:
+		% \begin{itemize}
+		\item Параллельный запуск append$^{o}$
+		\item Параллельный запуск revers$^{o}$ (при котором возникла проблема нехватки памяти)
+		\item Параллельный запуск некоторых функций, которые возвращают несколько ответов
+		\item Последней задачей оказалось слияние потоков
+		\item Объеденить все задачи и положить в интерпретатор
+		      % \end{itemize}
+	\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Процесс работы (2/4)}
+	% \lstset{numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt}
+	\begin{lstlisting}[mathescape=true,caption=\textbf{Параллелизация двух revers$^o$ на списках длины 700}, frame=single]
+    let goal = Call ("reverso", [ len; Var "xs" ]) in
+    let state = State.(empty |> "xs" --> Var 10
+    |> add_rel "appendo" [ "xs"; "ys"; "xys" ] appendo_body
+    |> add_rel "reverso" [ "xy"; "yx" ] reverso_body)in
+    let wrap g = let s = StateMonad.run (eval g) state in s in
+    let pool = Task.setup_pool ~num_domains:12 () in
+    let a = Task.async pool (fun _ -> wrap goal) in
+    let b = Task.async pool (fun _ -> wrap goal) in
+    (match Task.run pool (fun () -> Task.await pool a, 
+    Task.await pool b) with
+     | Result.Ok a, Result.Ok b -> Stream.mplus a b
+     | Ok _, Error _ | Error _, Ok _ | Error _, Error _ ->
+       failwithf "%s %d" __FILE__ __LINE__)
+    |> Stream.take ~n:(-1)
+    |> (fun xs ->
+         Format.printf "Got %d answers\n%!" (List.length xs);
+         xs)
+    |> List.iter (fun st -> printf "%a\n" Value.pp 
+    (Value.walk st (Value.var 10)))
+     \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Процесс работы (3/4)}
+	% \lstset{numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt}
+	\begin{lstlisting}[mathescape=true,caption=\textbf{Параллельная реализация Cond$^e$}, frame=single]
+    let c = Chan.make_unbounded () in
+      let rec force_stream x = match x with
+        | Stream.Cons (x, y) -> Chan.send c x;
+          force_stream (Lazy.force y)
+        | Stream.Nil -> ()
+        | _ -> assert false in
+      let* st = read in
+      let pool = Task.setup_pool ~num_domains:12 () in
+      let rec merge_stream n =
+        match Chan.recv_poll c with
+        | Some x -> let* () = put st in
+        return (Stream.mplus (Stream.return x)) <*> merge_stream n
+        | None -> return Stream.Nil
+     \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Процесс работы (4/4)}
+	% \lstset{numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt}
+	\begin{lstlisting}[mathescape=true,caption=\textbf{Параллельная реализация Cond$^e$}, frame=single]
+    in
+    let make_task acc =
+    Task.async pool (fun _ ->
+    force_stream (StateMonad.run (eval acc) st
+    |> Result.get_ok))
+    in
+    let make_task_list lst =
+    Stdlib.List.map make_task lst
+    in
+    Task.run pool (fun () ->
+    Stdlib.List.iter (fun x -> Task.await pool x)
+    (make_task_list lst));
+    merge_stream c
+     \end{lstlisting}
+\end{frame}
 
 % \begin{frame}[t]
 %   \frametitle{Экспериментальное исследование}
@@ -236,14 +345,37 @@
 %     \item Какие решения были выбраны для сравнения и почему
 %   \end{itemize}
 % \end{frame}
+\begin{frame}
+	\frametitle{Тестирование}
+	\begin{table}
+		\caption{Замеры тестов для двух append$^o$}
+		%\label{tabular}
+		%\begin{center}
+		\begin{tabular}{ccc}
+			Длинна списка & Количество потоков & время, сек. \\%почему то при объединении не работает вовсе, можно попробовать работать с отдельно вызываемыми функциями
+			7000          & 2                  & 26.7        \\
+			7000          & 1                  & 27.5        \\
+			8000          & 12                 & 24.2        \\
+			8000          & 1                  & 40.4        \\
+		\end{tabular}
+		%\end{center}
+	\end{table}
+
+	\begin{block}{Вывод}
+		После нескольких экспериментов сделан вывод, что запускать при малом количестве потоков, а также на малых обьемах данных не так выгодно, но при росте количества потоков пользы заметно больше.
+	\end{block}
+
+\end{frame}
 
 \begin{frame}[t]
-  \frametitle{Дальнейшие планы}
-  \begin{center}
-    \item Сделать параллельно исполняющуюся реализацию miniKanren
-  \end{center}
-  
-  \end{frame}
+	\frametitle{Дальнейшие планы}
+	\begin{itemize}
+		\item Протестировать на некотором количестве данных и убедиться, что
+		      работа действительно повышает эффективнось выполнения задач
+		\item Доработать неисправности и сделать рефакторинг существуюшей реализации
+	\end{itemize}
+
+\end{frame}
 
 % \begin{frame}[t]
 %   \frametitle{Результаты экспериментального исследования}
@@ -274,18 +406,23 @@
 % \end{frame}
 
 \begin{frame}
-  \frametitle{Результаты}
-  \begin{itemize}
-  \item Выбрал 5 версию OCaml для реализации
-  %\item Изучил примеры параллелизации
-  \item Научился параллельно запускать 2 независимые задачи${}^4$
-  \item Подготовился к реализации настоящего интерпретатора\footnote{\url{https://github.com/K0lba/unicanren} (Дата доступа: 07.12.22)}
+	\frametitle{Результаты}
+	\begin{itemize}
+		\item Выбрана 5.0.0 - Second Beta версия OCaml для реализации
+		      %\item Изучил примеры параллелизации
+		      %\item Изучить примеры параллелизации
+		\item Внешне распараллелены две независимые задачи на miniKanren
+		      \begin{itemize}
+			      \item append$^{o}$
+			      \item revers$^{o}$
+		      \end{itemize}
+		\item Встроить в Unicanren параллелизацию, которая работает не толь-
+		      ко внешне
+	\end{itemize}
+	Всю проделанную работу можно посмотреть на github репозитории\footnote{\url{https://github.com/K0lba/unicanren} (Дата доступа: 03.01.2023)}
 
-  \end{itemize}
-  
-  
-  \end{frame}
-  
+\end{frame}
+
 
 
 %\addtocounter{framenumber}{1}
