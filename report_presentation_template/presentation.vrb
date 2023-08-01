@@ -1,16 +1,16 @@
-\frametitle{Процесс работы (4/4)}
-\begin{lstlisting}[mathescape=true,caption=\textbf{Параллельная реализация Cond$^e$}, frame=single]
-    in
-    let make_task acc =
-    Task.async pool (fun _ ->
-    force_stream (StateMonad.run (eval acc) st
-    |> Result.get_ok))
-    in
-    let make_task_list lst =
-    Stdlib.List.map make_task lst
-    in
-    Task.run pool (fun () ->
-    Stdlib.List.iter (fun x -> Task.await pool x)
-    (make_task_list lst));
-    merge_stream c
-     \end{lstlisting}
+\frametitle{Процесс работы (5/5)}
+\textbf{Внедрение готового проекта в Miminet:}
+	% \lstset{numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt}
+	\begin{figure}[h]
+
+		\centering
+			
+		\includegraphics[width=0.6\linewidth]{Снимок экрана 2023-05-15 212721.png}
+			
+		\caption{Пример ссылки на анализатор в Miminet}
+			
+		\label{fig:mpr}
+			
+	\end{figure}
+	Переход на страницу анализатора происходит по маршруту –
+	/MimiShark?guid=...

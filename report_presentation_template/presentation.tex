@@ -65,7 +65,7 @@
 
 
 % То, что в квадратных скобках, отображается внизу по центру каждого слайда. 
-\title[Параллелизация miniKanren]{Параллельная реализация miniKanren}
+\title[Анализатор сетевых пакетов MimiShark]{Анализатор сетевых пакетов с веб-интерфейсом.}
 
 % То, что в квадратных скобках, отображается в левом нижнем углу. 
 \institute[СПбГУ]{}
@@ -93,7 +93,7 @@
 
 	{\scriptsize
 		% У научного руководителя должна быть указана научная степень
-		{\bfseries Научный руководитель:} Д.С.Косарев, ассистент кафедры системного программирования \\
+		{\bfseries Научный руководитель:}  И. В. Зеленчук, старший преподаватель кафедры системного программирования \\
 		% Консультанта может и не быть. Должна быть указана должность или ученая степень
 		% {\bfseries Консультант:}  к.ф.-м.н. Д.С.Косарев, "MatMex, JetBrains Research laboratory" \\
 		% Для курсовой не обязателен. Должна быть указана должность или ученая степень
@@ -111,13 +111,13 @@
 \begin{frame}[fragile]
 	\frametitle{Введение}
 	\begin{itemize}
-		\item Работа направлена на повышение эффективности вычислений на языке miniKanren путем декомпозиции задачи на потоках
+		\item Работа направлена на упрощение практической части в изучении работы компьютерных сетей
+		\item Удобство (анализатор находится <<под рукой>>, не нужно пользоваться сторонними программами)
 		      % Краткий обзор тематики работы (как вариант --- устно, пока показывается титульный слайд)
-		\item Данное решение предназначено для разработчиков, иcпользующих miniKanren
+		\item Данное решение предназначено для студентов, изучающих предмет <<Компьютерные сети>> и связанные с ним курсы
 		      % Не нужно определять общеизвестные понятия
 		      % \item Сообщество miniKanren всерьез еще этим не занималось, поэтому 
-		\item У работы нет аналогов
-		\item За основу взят язык программирования OCaml, а также встаиваемый в него язык miniKanren
+		\item Визуализация пакетов для удобной работы с ними
 		      % Применимость/полезность данной работы, обоснование выбора именно этой темы
 		      % \item Если тема похожа на темы других работ (в том числе прошлых лет), надо явно описать разницу
 	\end{itemize}
@@ -126,18 +126,19 @@
 
 \begin{frame}
 	\frametitle{Постановка задачи}
-	\textbf{Целью} работы является распараллеливание минимальной реализа-
-	ции miniKanren для OCaml %озвученной выше  
+	\textbf{Целью} работы является интеграция веб-интерфейса, отображающего сетевые пакеты и информацию о протоколе в Miminet.  %озвученной выше  
 
 	\textbf{Задачи}:
 	\begin{itemize}
 		% \item Выбрать алгоритм, подход, метод %основываясь на проведённом анализе проблемы, области, существующих решений
 		% \item Доказать корректность алгоритма
-		\item Выбрать версию OCaml, на которой будет реализована параллельность
+		\item Провести обзор существующих веб аналогов, предоставляющих такие же функции, как Wireshark
 		      %\item Изучить примеры параллелизации
-		\item Внешне распараллелить две независимые задачи на miniKanren
-		\item Встроить в Unicanren параллелизацию, которая работает не толь-
-		      ко внешне\footnote{\url{https://github.com/Kakadu/unicanren} (Дата доступа: 03.01.2023)}
+		\item На основе требований спроектировать сервис
+		\item Сверстать веб-страницу
+		\item Передать информацию о пакетах на страницу
+		\item Внедрить реализованный сервис в Miminet
+		% \footnote{\url{https://github.com/Kakadu/unicanren} (Дата доступа: 03.01.2023)}
 		      % \item Подзадачи:
 		      % \begin{itemize}
 		      %   % \item Выбрать алгоритм, подход, метод %основываясь на проведённом анализе проблемы, области, существующих решений
@@ -152,6 +153,16 @@
 
 
 
+\begin{frame}
+	\frametitle{Аналоги}
+	\begin{itemize}
+		\item CloudShark\footnote{\url{https://www.qacafe.com/analysis-tools/cloudshark/}(Дата доступа: 15.05.22)}
+		\item PacketSafari\footnote{\url{https://www.packetsafari.com/}(Дата доступа: 15.05.22)}
+		\item PacketTotal\footnote{\url{https://packettotal.com/}(Дата доступа: 15.05.22)}
+
+		      % \item Почему была выбрана 5 версия? В 4 версии нет настоящего параллелизма (приходится запускать системные потоки и параллельность происходит на уровне системы, а не на уровне OCaml)
+	\end{itemize}
+\end{frame}
 
 % \begin{frame}
 %   \frametitle{Используемые инструменты, подходы}
@@ -185,12 +196,9 @@
 \begin{frame}
 	\frametitle{Используемые инструменты, подходы}
 	\begin{itemize}
-		\item Выбрана самая свежая версия OCaml (5.0.0~beta2)\footnote{\url{https://ocaml.org/news/ocaml-5.0.beta2}(Дата доступа: 08.12.22)}
-		      В этой версии добавили multicore в runtime и
-		      c помощью этого легко параллелить программы на OCaml
-		\item Для распараллеливания используется библиотека DomainsLib\footnote{\url{https://github.com/ocaml-multicore/parallel-programming-in-multicore-ocaml}(Дата доступа: 08.12.22)},
-		      в которой присутствуют 2 модуля: Task -- для вызова многопоточности и Chan -- для передачи информации между доменами
-		\item Вся проделанная работа выполнена на минимальной реализации miniKanren -- Unicanren, которая состоит из 4 базовых конструкций: Fresh, Unify, Conde и Conj
+		\item Серверная часть была реализована с использованием фреймворка Flask\footnote{\url{https://flask.palletsprojects.com/en/2.3.x/}(Дата доступа: 15.05.22)}
+		\item Чтобы создать графическую часть сервиса использовался фреймворк Bootstrap5\footnote{\url{https://getbootstrap.com/}(Дата доступа: 15.05.22)}
+		\item Для работы с pcap файлами была использована библиотека dpkt\footnote{\url{https://kbandla.github.io/dpkt/}(Дата доступа: 15.05.22)} для Python
 		      % \item Почему была выбрана 5 версия? В 4 версии нет настоящего параллелизма (приходится запускать системные потоки и параллельность происходит на уровне системы, а не на уровне OCaml)
 	\end{itemize}
 \end{frame}
@@ -258,82 +266,136 @@
 % \end{frame}
 
 \begin{frame}
-	\frametitle{Процесс работы(1/4)}
-	\begin{itemize}
-		% \item Задачи, которые мне предстояло выполнить:
-		% \begin{itemize}
-		\item Параллельный запуск append$^{o}$
-		\item Параллельный запуск revers$^{o}$ (при котором возникла проблема нехватки памяти)
-		\item Параллельный запуск некоторых функций, которые возвращают несколько ответов
-		\item Последней задачей оказалось слияние потоков
-		\item Объеденить все задачи и положить в интерпретатор
-		      % \end{itemize}
-	\end{itemize}
+	\frametitle{Процесс работы(1/5)}
+	% \textbf{Проектирование сервиса:}
+	\begin{figure}[h]
+
+	\centering
+		
+	\includegraphics[width=0.8\linewidth]{Scheme_of_project.png}
+		
+	\caption{Схема обработки файлов на сервере}
+		
+	\label{fig:mpr}
+		
+\end{figure}
 \end{frame}
 
 
 
-\begin{frame}[fragile]{Процесс работы (2/4)}
+\begin{frame}[fragile]{Процесс работы (2/5)}
+% \textbf{Реализация серверной части:}
 	% \lstset{numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt}
-	\begin{lstlisting}[mathescape=true,caption=\textbf{Параллелизация двух revers$^o$ на списках длины 700}, frame=single]
-    let goal = Call ("reverso", [ len; Var "xs" ]) in
-    let state = State.(empty |> "xs" --> Var 10
-    |> add_rel "appendo" [ "xs"; "ys"; "xys" ] appendo_body
-    |> add_rel "reverso" [ "xy"; "yx" ] reverso_body)in
-    let wrap g = let s = StateMonad.run (eval g) state in s in
-    let pool = Task.setup_pool ~num_domains:12 () in
-    let a = Task.async pool (fun _ -> wrap goal) in
-    let b = Task.async pool (fun _ -> wrap goal) in
-    (match Task.run pool (fun () -> Task.await pool a, 
-    Task.await pool b) with
-     | Result.Ok a, Result.Ok b -> Stream.mplus a b
-     | Ok _, Error _ | Error _, Ok _ | Error _, Error _ ->
-       failwithf "%s %d" __FILE__ __LINE__)
-    |> Stream.take ~n:(-1)
-    |> (fun xs ->
-         Format.printf "Got %d answers\n%!" (List.length xs);
-         xs)
-    |> List.iter (fun st -> printf "%a\n" Value.pp 
-    (Value.walk st (Value.var 10)))
-     \end{lstlisting}
+% 	\begin{lstlisting}[mathescape=true,caption=\textbf{Основной декоратор}, frame=single]
+% @app.route( '/MimiShark' )
+% 	def main_page( ):
+% 	data = ReadJson(path)
+% 	return render_template( 'main.html',pcap_data = data)		
+%      \end{lstlisting}
+% 	\begin{lstlisting}[mathescape=true,caption=\textbf{Основной декоратор, после внедрения}, frame=single]
+% app.add_url_rule('/MimiShark',methods=['GET'], 
+% 					view_func=mimishark_page)
+% 	\end{lstlisting}
+\begin{minipage}{5in}
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\textbf{Основной декоратор}
+\begin{Verbatim}[commandchars=\\\{\}]
+	
+	\textcolor{red}{@app.route}( '/MimiShark' )
+	\textcolor{green}{def} main_page( ):
+	\   \textcolor{blue}{data} = ReadJson(path)
+	\   \textcolor{purple}{return} render_template( 'main.html',pcap_data = \textcolor{cyan}{data})
+		
+	
+	
+	\end{Verbatim}
+	\end{minipage}	
+\begin{minipage}{5in}
+			~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\textbf{Основной декоратор, после внедрения}
+\begin{Verbatim}[commandchars=\\\{\}]
+	
+	\textcolor{red}{app}.add_url_rule('/MimiShark',methods=[\textcolor{green}{'GET'}], 
+	\                                      view_func=\textcolor{cyan}{mimishark_page})
+		
+	\end{Verbatim}
+		\end{minipage} 
+\end{frame}
+% Пришлось подстроиться под структуру файлов Miminet
+% при этом vie_func = ссылается на ту же функцию из предыдущего листинга
+% на сторону html передаем в качестве переменной pcap_data и с помощью шаблонизатора jinja выводим на странице
+
+\begin{frame}[fragile]{Процесс работы (3/5)}
+	% \textbf{Реализация графической составляющей:}
+	% \lstset{numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt}
+	\begin{figure}[h]
+
+		\centering
+			
+		\includegraphics[width=0.8\linewidth]{cite.jpg}
+			
+		\caption{Внешний вид веб-страницы}
+			
+		\label{fig:mpr}
+			
+	\end{figure}
+\end{frame}
+% Помимо html и css был задействован javascript, с помощью которого  писались функции вывода данных о выбранном файле
+
+\begin{frame}[fragile]{Процесс работы (4/5)}
+	% \textbf{Парсинг и передача пакетов на сайт:}
+	\begin{minipage}{5in}
+		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\textbf{Работа парсера pcap файлов}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\ \textcolor{purple}{import} dpkt
+\ \textcolor{green}{def} add_packets(pcap):
+\   \textcolor{red}{for} timestamp, buf in pcap:
+\      \textcolor{blue}{eth} = dpkt.ethernet.Ethernet(buf)
+\      pcap_file[ "time" ] = str(datetime.datetime(timestamp))
+\      \textcolor{blue}{ip} = eth.data
+\	     pcap_file[ "source" ] = inet_to_str(ip.src)
+\	     pcap_file[ "destination" ] = inet_to_str(ip.dst)
+\	     pcap_file[ "protocol" ] = ip.get_proto(ip.p).__name__
+\	     pcap_file[ "length" ] = ip.len
+\	     ... 
+	 \end{Verbatim}
+	\end{minipage}
+% 	\begin{lstlisting}[mathescape=true,caption=\textbf{Работа парсера pcap файлов}, frame=single]
+% import dpkt
+% def add_packets(pcap):
+%   for timestamp, buf in pcap:
+%    eth = dpkt.ethernet.Ethernet(buf)
+%    pcap_file[ "time" ] = str(datetime.datetime(timestamp))
+%    ip = eth.data
+%    pcap_file[ "source" ] = inet_to_str(ip.src)
+%    pcap_file[ "destination" ] = inet_to_str(ip.dst)
+%    pcap_file[ "protocol" ] = ip.get_proto(ip.p).__name__
+%    pcap_file[ "length" ] = ip.len
+%    pcap_file[ "decode_ip" ] = ip_protocol_prop(ip)
+%    pcap_file[ "bytes" ] = mac_to_str(buf)
+%    pcap_file[ "ascii" ] = str(bytes.fromhex(i))[2:len((str(a)))-1] 
+%    for i in bytes_repr
+%      \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Процесс работы (3/4)}
-	% \lstset{numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt}
-	\begin{lstlisting}[mathescape=true,caption=\textbf{Параллельная реализация Cond$^e$}, frame=single]
-    let c = Chan.make_unbounded () in
-      let rec force_stream x = match x with
-        | Stream.Cons (x, y) -> Chan.send c x;
-          force_stream (Lazy.force y)
-        | Stream.Nil -> ()
-        | _ -> assert false in
-      let* st = read in
-      let pool = Task.setup_pool ~num_domains:12 () in
-      let rec merge_stream n =
-        match Chan.recv_poll c with
-        | Some x -> let* () = put st in
-        return (Stream.mplus (Stream.return x)) <*> merge_stream n
-        | None -> return Stream.Nil
-     \end{lstlisting}
-\end{frame}
+% Существует также функция получения данных из протоколов, например для ip - это версия длина и тд.
+% для tcp - флаги, sourseport, destinationport.
 
-\begin{frame}[fragile]{Процесс работы (4/4)}
+\begin{frame}[fragile]{Процесс работы (5/5)}
+	\textbf{Внедрение готового проекта в Miminet:}
 	% \lstset{numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt}
-	\begin{lstlisting}[mathescape=true,caption=\textbf{Параллельная реализация Cond$^e$}, frame=single]
-    in
-    let make_task acc =
-    Task.async pool (fun _ ->
-    force_stream (StateMonad.run (eval acc) st
-    |> Result.get_ok))
-    in
-    let make_task_list lst =
-    Stdlib.List.map make_task lst
-    in
-    Task.run pool (fun () ->
-    Stdlib.List.iter (fun x -> Task.await pool x)
-    (make_task_list lst));
-    merge_stream c
-     \end{lstlisting}
+	\begin{figure}[h]
+
+		\centering
+			
+		\includegraphics[width=0.6\linewidth]{Снимок экрана 2023-05-15 212721.png}
+			
+		\caption{Пример ссылки на анализатор в Miminet}
+			
+		\label{fig:mpr}
+			
+	\end{figure}
+	Переход на страницу анализатора происходит по маршруту –
+	/MimiShark?guid=...
 \end{frame}
 
 % \begin{frame}[t]
@@ -345,34 +407,33 @@
 %     \item Какие решения были выбраны для сравнения и почему
 %   \end{itemize}
 % \end{frame}
+% \begin{frame}
+% 	\frametitle{Тестирование}
+% 	\begin{table}
+% 		\caption{Замеры тестов для двух append$^o$}
+% 		%\label{tabular}
+% 		%\begin{center}
+% 		\begin{tabular}{ccc}
+% 			Длинна списка & Количество потоков & время, сек. \\%почему то при объединении не работает вовсе, можно попробовать работать с отдельно вызываемыми функциями
+% 			7000          & 2                  & 26.7        \\
+% 			7000          & 1                  & 27.5        \\
+% 			8000          & 12                 & 24.2        \\
+% 			8000          & 1                  & 40.4        \\
+% 		\end{tabular}
+% 		%\end{center}
+% 	\end{table}
+
+% 	\begin{block}{Вывод}
+% 		После нескольких экспериментов сделан вывод, что запускать при малом количестве потоков, а также на малых обьемах данных не так выгодно, но при росте количества потоков пользы заметно больше.
+% 	\end{block}
+
+% \end{frame}
+
 \begin{frame}
-	\frametitle{Тестирование}
-	\begin{table}
-		\caption{Замеры тестов для двух append$^o$}
-		%\label{tabular}
-		%\begin{center}
-		\begin{tabular}{ccc}
-			Длинна списка & Количество потоков & время, сек. \\%почему то при объединении не работает вовсе, можно попробовать работать с отдельно вызываемыми функциями
-			7000          & 2                  & 26.7        \\
-			7000          & 1                  & 27.5        \\
-			8000          & 12                 & 24.2        \\
-			8000          & 1                  & 40.4        \\
-		\end{tabular}
-		%\end{center}
-	\end{table}
-
-	\begin{block}{Вывод}
-		После нескольких экспериментов сделан вывод, что запускать при малом количестве потоков, а также на малых обьемах данных не так выгодно, но при росте количества потоков пользы заметно больше.
-	\end{block}
-
-\end{frame}
-
-\begin{frame}[t]
 	\frametitle{Дальнейшие планы}
 	\begin{itemize}
-		\item Протестировать на некотором количестве данных и убедиться, что
-		      работа действительно повышает эффективнось выполнения задач
-		\item Доработать неисправности и сделать рефакторинг существуюшей реализации
+		\item Реализовать некоторые функции (фильтры поиска и т.д.)
+		\item Добавить возможность импорта/экспорта данных
 	\end{itemize}
 
 \end{frame}
@@ -408,23 +469,75 @@
 \begin{frame}
 	\frametitle{Результаты}
 	\begin{itemize}
-		\item Выбрана 5.0.0 - Second Beta версия OCaml для реализации
+		\item Проведен обзор веб-аналогов Wireshark
 		      %\item Изучил примеры параллелизации
 		      %\item Изучить примеры параллелизации
-		\item Внешне распараллелены две независимые задачи на miniKanren
-		      \begin{itemize}
-			      \item append$^{o}$
-			      \item revers$^{o}$
-		      \end{itemize}
-		\item Встроить в Unicanren параллелизацию, которая работает не толь-
-		      ко внешне
+		\item Спроектирован сервис
+		\item Написана веб-страница анализатора
+		\item Информация о пакетах выведена на страницу
+		\item Конечный продукт интегрирован в Miminet
 	\end{itemize}
-	Всю проделанную работу можно посмотреть на github репозитории\footnote{\url{https://github.com/K0lba/unicanren} (Дата доступа: 03.01.2023)}
+
+	\vspace{20mm}
+	Всю проделанную работу можно посмотреть на github репозитории\footnote{\url{https://github.com/K0lba/MimiShark} (Дата доступа: 15.05.2023)}
+
+	Версию, готовую для интеграции, можно посмотреть на github репозитории\footnote{\url{https://github.com/K0lba/NetFront} (Дата доступа: 30.05.2023)}
 
 \end{frame}
+% \begin{frame}[fragile]{Реализация альтернативного переключения состояния W\textasciicircum X [1/2]}
+% 	\begin{minipage}{5in}
+% 	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\textbf{Основной декоратор}
+% 	\begin{Verbatim}[commandchars=\\\{\}]
+
+% 	\textcolor{red}{@app.route}( '/MimiShark' )
+% 	\textcolor{green}{def} main_page( ):
+% 	\   \textcolor{blue}{data} = ReadJson(path)
+% 	\   \textcolor{purple}{return} render_template( 'main.html',pcap_data = \textcolor{cyan}{data})
+	
 
 
+% \end{Verbatim}
+% \end{minipage}	
+% 	\begin{minipage}{5in}
+% 		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\textbf{Основной декоратор, после внедрения}
+% 		\begin{Verbatim}[commandchars=\\\{\}]
 
+% 	\textcolor{red}{app}.add_url_rule('/MimiShark',methods=[\textcolor{green}{'GET'}], 
+% 	\                                      view_func=\textcolor{cyan}{mimishark_page})
+	
+% 	 \end{Verbatim}
+% 	\end{minipage} 
+% 	% \begin{lstlisting}[mathescape=true,caption=\textbf{Основной декоратор}, frame=single]
+% 	% 	@app.route( '/MimiShark' )
+% 	% 		def main_page( ):
+% 	% 		data = ReadJson(path)
+% 	% 		return render_template( 'main.html',pcap_data = data)		
+% 	% 		 \end{lstlisting}
+% 	% 		\begin{lstlisting}[mathescape=true,caption=\textbf{Основной декоратор, после внедрения}, frame=single]
+% 	% 	app.add_url_rule('/MimiShark',methods=['GET'], 
+% 	% 						view_func=mimishark_page)
+% 	% 		\end{lstlisting}
+% \end{frame}
+
+% \begin{frame}[fragile]{Реализация альтернативного переключения состояния W\textasciicircum X [1/2]}
+% \begin{minipage}{5in}
+% 		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\textbf{Работа парсера pcap файлов}
+% \begin{Verbatim}[commandchars=\\\{\}]
+
+% \ \textcolor{purple}{import} dpkt
+% \ \textcolor{green}{def} add_packets(pcap):
+% \   \textcolor{red}{for} timestamp, buf in pcap:
+% \      \textcolor{blue}{eth} = dpkt.ethernet.Ethernet(buf)
+% \      pcap_file[ "time" ] = str(datetime.datetime(timestamp))
+% \      \textcolor{blue}{ip} = eth.data
+% \	     pcap_file[ "source" ] = inet_to_str(ip.src)
+% \	     pcap_file[ "destination" ] = inet_to_str(ip.dst)
+% \	     pcap_file[ "protocol" ] = ip.get_proto(ip.p).__name__
+% \	     pcap_file[ "length" ] = ip.len
+% \	     ... 
+% 	 \end{Verbatim}
+% 	\end{minipage} 
+% \end{frame}
 %\addtocounter{framenumber}{1}
 \appendix
 
